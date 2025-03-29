@@ -1,0 +1,10 @@
+{
+    "AUTHORIZATION_INVALID": {
+        "status": 401,
+        "message": "Authorization is invalid"
+    },
+    "AUTH_FAILED": {
+        "status": 401,
+        "message": "Please provide valid credentials"
+    }
+}
