@@ -16,8 +16,12 @@ const authenticate = async (req, res, next) => {
     
     const user = await User.findOne({ _id: decoded.userId }).select('-password').lean();
 
-    if (!user || !user.isActive) {
+    if (!user) {
       return middlewareError('USER_NOT_FOUND', res);
+    }
+
+    if (!user.isActive) {
+      return middlewareError('USER_INACTIVE', res);
     }
     
     req.user = user
