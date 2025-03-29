@@ -42,7 +42,7 @@ async function loginUser(email, password) {
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 
-    return { token, user: { id: user._id, name: user.name, email: user.email, role: user.role } };
+    return { token, user: { _id: user._id, name: user.name, email: user.email, role: user.role } };
 }
 
 module.exports = {

@@ -13,6 +13,7 @@ const USER_PROJECTION = Object.freeze({
     general : {
         password: 0,
         __v: 0,
+        updatedAt: 0,
     }
 });
 

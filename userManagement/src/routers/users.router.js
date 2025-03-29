@@ -12,6 +12,14 @@ router.get(
     userController.getAllUsers
 );
 
+router.get(
+    '/:id',
+    authenticate,
+    validator(userValidation.getUserById),
+    userController.getUserById
+);
 
+// router.put('/:id', authenticate, validator(updateUserSchema), userController.updateUser);
+// router.delete('/:id', authenticate, userController.deleteUser);
 
 module.exports = router;

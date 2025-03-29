@@ -18,9 +18,16 @@ const getUsers = Joi.object({
   })
 });
 
+const getUserById = Joi.object({
+  params: Joi.object().keys({
+    id: Joi.string().required()
+  })
+});
+
 
 
 module.exports = {
   updateUserSchema,
   getUsers,
+  getUserById,
 };

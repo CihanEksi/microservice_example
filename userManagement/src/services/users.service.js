@@ -1,6 +1,6 @@
 const { User } = require('../models');
 const { USER_PROJECTION } = require('../enums/user.enums');
-
+const { ObjectId } = require('mongoose').Types;
 
 const getAllUsers = async (params) => {
     const {
@@ -8,9 +8,9 @@ const getAllUsers = async (params) => {
         orderBy = 'desc',
         keyword,
     } = params;
-    
+
     let { page = 1, limit = 10 } = params;
-    
+
     page = Number(page);
     limit = Number(limit);
 
@@ -25,21 +25,21 @@ const getAllUsers = async (params) => {
             { email: { $regex: keyword, $options: 'i' } },
         ];
     }
-    
+
     sort[sortBy] = orderBy === 'asc' ? 1 : -1;
     const skip = (page - 1) * limit;
-    
+
     aggregate.push({ $match: match });
     aggregate.push({ $sort: sort });
     aggregate.push({ $project: projection });
-    
+
     const countAggregate = [...aggregate, { $count: 'total' }];
-    
+
     aggregate.push({ $skip: skip });
     aggregate.push({ $limit: limit });
 
-    const usersPromise =  User.aggregate(aggregate);
-    const totalPromise =  User.aggregate(countAggregate);
+    const usersPromise = User.aggregate(aggregate);
+    const totalPromise = User.aggregate(countAggregate);
 
     const [users, total] = await Promise.all([usersPromise, totalPromise]);
     const totalDocs = total.length ? total[0].total : 0;
@@ -55,6 +55,21 @@ const getAllUsers = async (params) => {
     };
 };
 
+const getUserById = async (userId) => {
+    if (!ObjectId.isValid(userId)) {
+        throw new Error('USER_NOT_FOUND');
+    }
+
+    const user = await User.findOne({ _id: userId }).select(USER_PROJECTION.general);
+
+    if (!user) {
+        throw new Error('USER_NOT_FOUND');
+    }
+
+    return user;
+}
+
 module.exports = {
     getAllUsers,
+    getUserById,
 };
