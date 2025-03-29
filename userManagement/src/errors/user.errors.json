@@ -10,5 +10,9 @@
     "UNKNOWN_ERROR": {
         "message": "Unknown error.",
         "status": 500
+    },
+    "USER_INACTIVE": {
+        "message": "User is inactive.",
+        "status": 403
     }
 }
