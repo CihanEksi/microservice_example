@@ -19,7 +19,18 @@ router.get(
     userController.getUserById
 );
 
-// router.put('/:id', authenticate, validator(updateUserSchema), userController.updateUser);
-// router.delete('/:id', authenticate, userController.deleteUser);
+router.put(
+    '/:id',
+    authenticate,
+    validator(userValidation.updateUser),
+    userController.updateUser
+);
+
+router.delete(
+    '/:id', 
+    authenticate,
+    validator(userValidation.deleteUser), 
+    userController.deleteUser
+);
 
 module.exports = router;

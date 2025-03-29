@@ -69,7 +69,45 @@ const getUserById = async (userId) => {
     return user;
 }
 
+const updateUser = async (userId, updateData) => {
+
+    if (!ObjectId.isValid(userId)) {
+        throw new Error('USER_NOT_FOUND');
+    }
+
+    const user = await User.findOne({ _id: userId });
+
+    if (!user) {
+        throw new Error('USER_NOT_FOUND');
+    }
+    console.log('user', user);
+    Object.assign(user, updateData);
+    console.log('user', user);
+
+    await user.save();
+
+    return user;
+};
+
+const deleteUser = async (userId) => {
+    if (!ObjectId.isValid(userId)) {
+        throw new Error('USER_NOT_FOUND');
+    }
+
+    const user = await User.findOne({ _id: userId }).select("_id");
+
+    if (!user) {
+        throw new Error('USER_NOT_FOUND');
+    }
+
+    await User.deleteOne({ _id: userId });
+
+    return { message: 'User deleted successfully' };
+}
+
 module.exports = {
     getAllUsers,
     getUserById,
+    updateUser,
+    deleteUser,
 };
