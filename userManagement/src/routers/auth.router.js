@@ -7,5 +7,6 @@ const { createUserSchema, loginSchema } = require('../validations/auth.validatio
 
 router.post('/register', validator(createUserSchema), authController.register);
 router.post('/login', validator(loginSchema), authController.login);
+router.get('/jwt', authenticate, authController.jwtCheck);
 
 module.exports = router;

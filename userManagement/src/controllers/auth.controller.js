@@ -13,7 +13,13 @@ const login = asyncHandler(async (req, res) => {
   res.status(200).json(result);
 });
 
+const jwtCheck = asyncHandler(async (req, res) => {
+  const user = req.user;
+  res.status(200).json(user);
+});
+
 module.exports = {
   register,
   login,
+  jwtCheck,
 };
