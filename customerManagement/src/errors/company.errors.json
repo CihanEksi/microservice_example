@@ -1,0 +1,10 @@
+{
+    "COMPANY_ALREADY_EXISTS": {
+        "message": "This company is already exists.",
+        "status": 400
+    },
+    "COMPANY_NOT_FOUND": {
+        "message": "Company not found.",
+        "status": 404
+    }
+}

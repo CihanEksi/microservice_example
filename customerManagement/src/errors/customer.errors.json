@@ -1,0 +1,14 @@
+{
+    "CUSTOMER_ALREADY_EXISTS": {
+        "message": "This customer is already exists.",
+        "status": 400
+    },
+    "CUSTOMER_NOT_FOUND": {
+        "message": "Customer not found.",
+        "status": 404
+    },
+    "CUSTOMER_INACTIVE": {
+        "message": "Customer is inactive.",
+        "status": 403
+    }
+}
