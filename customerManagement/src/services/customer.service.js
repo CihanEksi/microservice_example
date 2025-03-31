@@ -92,6 +92,14 @@ const getCustomers = async (params) => {
                 path: '$company',
                 preserveNullAndEmptyArrays: true,
             }
+        },
+        {
+            $lookup: {
+                from: 'notes',
+                localField: '_id',
+                foreignField: 'customerId',
+                as: 'notes',
+            }
         }
     ];
 
