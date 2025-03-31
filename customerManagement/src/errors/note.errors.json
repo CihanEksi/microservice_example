@@ -1,0 +1,6 @@
+{
+    "NOTE_NOT_FOUND": {
+        "message": "Note not found.",
+        "status": 404
+    }
+}

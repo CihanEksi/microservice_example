@@ -3,6 +3,7 @@ const authErrors = require("./auth.errors.json")
 const systemErrors = require("./system.errors.json")
 const customerErrors = require("./customer.errors.json")
 const companyErrors = require("./company.errors.json")
+const noteErrors = require("./note.errors.json")
 
 module.exports = { 
     ...userErrors, 
@@ -10,4 +11,5 @@ module.exports = {
     ...systemErrors, 
     ...customerErrors,
     ...companyErrors,
+    ...noteErrors
 }
