@@ -1,0 +1,850 @@
+swagger: '2.0'
+info:
+  contact: {}
+  title: Gateway
+  version: 1.0.0
+host: 'localhost:2999'
+basePath: /
+paths:
+  /customer-management/api/company/create:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - text/plain
+      parameters:
+        - in: body
+          name: body
+          schema:
+            properties:
+              name:
+                example: company 2
+                type: string
+            type: object
+      responses:
+        '201':
+          description: create company
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            content-length:
+              type: string
+            date:
+              type: string
+            etag:
+              type: string
+            x-powered-by:
+              type: string
+      tags:
+        - customer_management
+        - company
+      description: create company
+      operationId: createCompany
+      summary: create company
+  /customer-management/api/company/list:
+    get:
+      produces:
+        - text/plain
+      parameters:
+        - in: query
+          name: page
+          type: string
+        - in: query
+          name: limit
+          type: string
+      responses:
+        '200':
+          description: list company
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            content-length:
+              type: string
+            date:
+              type: string
+            etag:
+              type: string
+            x-powered-by:
+              type: string
+      tags:
+        - customer_management
+        - company
+      description: list company
+      operationId: listCompany
+      summary: list company
+  /customer-management/api/company/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        type: string
+    delete:
+      parameters: []
+      responses:
+        '204':
+          description: delete company
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            date:
+              type: string
+            x-powered-by:
+              type: string
+      tags:
+        - customer_management
+        - company
+      description: delete company
+      operationId: deleteCompany
+      summary: delete company
+  /customer-management/api/customer-notes/{customerId}/create:
+    parameters:
+      - description: customer Id
+        in: path
+        name: customerId
+        required: true
+        type: string
+    post:
+      consumes:
+        - application/json
+      produces:
+        - text/plain
+      parameters:
+        - in: body
+          name: body
+          schema:
+            properties:
+              note:
+                example: test note to create
+                type: string
+            type: object
+      responses:
+        '201':
+          description: create customer note
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            content-length:
+              type: string
+            date:
+              type: string
+            etag:
+              type: string
+            x-powered-by:
+              type: string
+      tags:
+        - customer_management
+        - customer notes
+      description: create customer note
+      operationId: createCustomerNote
+      summary: create customer note
+  /customer-management/api/customer-notes/{customerNoteId}:
+    parameters:
+      - description: customer-note Id
+        in: path
+        name: customerNoteId
+        required: true
+        type: string
+    delete:
+      parameters: []
+      responses:
+        '204':
+          description: delete customer note
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            date:
+              type: string
+            x-powered-by:
+              type: string
+      tags:
+        - customer_management
+        - customer notes
+      description: delete customer note
+      operationId: deleteCustomerNote
+      summary: delete customer note
+    put:
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          schema:
+            properties:
+              note:
+                example: test note to update 2
+                type: string
+            type: object
+      responses:
+        '204':
+          description: update customer note
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            date:
+              type: string
+            x-powered-by:
+              type: string
+      tags:
+        - customer_management
+        - customer notes
+      description: update customer note
+      operationId: updateCustomerNote
+      summary: update customer note
+  /customer-management/api/customer/create:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - text/plain
+      parameters:
+        - in: body
+          name: body
+          schema:
+            properties:
+              company:
+                example: 67ec50b9caa7acb89fd66c2d
+                type: string
+              email:
+                example: c4@mind.com
+                type: string
+              name:
+                example: Customer 4
+                type: string
+              phone:
+                example: '4'
+                type: string
+            type: object
+      responses:
+        '201':
+          description: create customer
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            content-length:
+              type: string
+            date:
+              type: string
+            etag:
+              type: string
+            x-powered-by:
+              type: string
+      tags:
+        - customer_management
+        - customer
+      description: create customer
+      operationId: createCustomer
+      summary: create customer
+  /customer-management/api/customer/list:
+    get:
+      consumes:
+        - text/plain
+      produces:
+        - text/plain
+      parameters:
+        - description: |-
+            sayfa numarasi 
+            varsayilan degeri '1'
+          in: query
+          name: page
+          type: string
+        - description: |-
+            sayfa basina gelecek dokuman sayisi 
+            varsayilan degeri '10'
+          in: query
+          name: limit
+          type: string
+        - description: |-
+            siralama secenegi 
+            secenekler ('createdAt', 'name', 'email', 'phone', 'companyName')
+            varsayilan: 'createdAt'
+          in: query
+          name: sortBy
+          type: string
+        - description: |-
+            siralama bicimi 
+            secenekler ('asc', 'desc')
+            varsayilan deger 'desc'
+          in: query
+          name: orderBy
+          type: string
+        - description: sirket ismi ile arama yapamak icin
+          in: query
+          name: companyName
+          type: string
+        - description: telefon  ile arama yapamak icin
+          in: query
+          name: phone
+          type: string
+        - description: email ile arama yapamak icin
+          in: query
+          name: email
+          type: string
+        - description: id ile filtreleme yapmak icin
+          in: query
+          name: id
+          type: string
+        - in: body
+          name: body
+          schema:
+            format: binary
+            type: string
+      responses:
+        '200':
+          description: customer list
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            content-length:
+              type: string
+            date:
+              type: string
+            etag:
+              type: string
+            x-powered-by:
+              type: string
+      tags:
+        - customer_management
+        - customer
+      description: customer list
+      operationId: customerList
+      summary: customer list
+  /customer-management/api/customer/{id}:
+    parameters:
+      - description: customer id degeri
+        in: path
+        name: id
+        required: true
+        type: string
+    delete:
+      consumes:
+        - text/plain
+      parameters:
+        - in: body
+          name: body
+          schema:
+            format: binary
+            type: string
+      responses:
+        '204':
+          description: delete customer
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            date:
+              type: string
+            x-powered-by:
+              type: string
+      tags:
+        - customer_management
+        - customer
+      description: delete customer
+      operationId: deleteCustomer
+      summary: delete customer
+    put:
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          schema:
+            properties:
+              company:
+                example: 67ec50b9caa7acb89fd66c2d
+                type: string
+              email:
+                example: c5@mind.com
+                type: string
+              name:
+                example: '5'
+                type: string
+              phone:
+                example: '5'
+                type: string
+            type: object
+      responses:
+        '204':
+          description: update customer
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            date:
+              type: string
+            x-powered-by:
+              type: string
+      tags:
+        - customer_management
+        - customer
+      description: update customer
+      operationId: updateCustomer
+      summary: update customer
+  /sale-management/api/sales/create:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          schema:
+            properties:
+              customerId:
+                example: 67ec531c391523b7b17d4b81
+                type: string
+              date:
+                example: '2025-10-27T14:30:45.123+03:00'
+                type: string
+              note:
+                example: Ilk asama
+                type: string
+              totalAmount:
+                example: 1
+                type: number
+            type: object
+      responses:
+        '201':
+          description: create sale not note create
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            content-length:
+              type: string
+            date:
+              type: string
+            etag:
+              type: string
+            x-powered-by:
+              type: string
+          schema:
+            properties:
+              _id:
+                example: 3
+                type: number
+              notes:
+                example: []
+                items: {}
+                type: array
+              saleId:
+                example: 3
+                type: number
+              saleLogs:
+                example:
+                  - _id: 3
+                    createdAt: '2025-04-01T21:33:21.000Z'
+                    saleId: 3
+                    status: Yeni
+                    totalAmount: '2.00'
+                items:
+                  properties:
+                    _id:
+                      example: 3
+                      type: number
+                    createdAt:
+                      example: '2025-04-01T21:33:21.000Z'
+                      type: string
+                    saleId:
+                      example: 3
+                      type: number
+                    status:
+                      example: Yeni
+                      type: string
+                    totalAmount:
+                      example: '2.00'
+                      type: string
+                  type: object
+                type: array
+              status:
+                example: Yeni
+                type: string
+            type: object
+      tags:
+        - sale_management
+        - sales
+      description: create sale
+      operationId: createSale
+      summary: create sale
+  /sale-management/api/sales/list:
+    get:
+      produces:
+        - text/plain
+      parameters: []
+      responses:
+        '200':
+          description: list sale
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            content-length:
+              type: string
+            date:
+              type: string
+            etag:
+              type: string
+            x-powered-by:
+              type: string
+      tags:
+        - sale_management
+        - sales
+      description: list sale
+      operationId: listSale
+      summary: list sale
+  /sale-management/api/sales/{saleId}:
+    parameters:
+      - in: path
+        name: saleId
+        required: true
+        type: string
+    put:
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          schema:
+            properties:
+              date:
+                example: '2025-10-28T14:30:45.123+03:00'
+                type: string
+              note:
+                example: reddedildi
+                type: string
+              status:
+                example: Kapandı
+                type: string
+              totalAmount:
+                example: 12
+                type: number
+            type: object
+      responses:
+        '204':
+          description: update sale
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            date:
+              type: string
+            x-powered-by:
+              type: string
+      tags:
+        - sale_management
+        - sales
+      description: update sale
+      operationId: updateSale
+      summary: update sale
+  /user-management/api/auth/jwt:
+    get:
+      consumes:
+        - application/json
+      produces:
+        - text/plain
+      parameters:
+        - in: body
+          name: body
+          schema:
+            properties:
+              email:
+                example: email@email.com
+                type: string
+              password:
+                example: password
+                type: string
+            type: object
+      responses:
+        '200':
+          description: jwt check
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            X-Powered-By:
+              type: string
+      tags:
+        - user_management
+        - jwt
+      description: jwt check
+      operationId: jwtCheck
+      summary: jwt check
+  /user-management/api/auth/login:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - text/plain
+      parameters:
+        - in: body
+          name: body
+          schema:
+            properties:
+              email:
+                example: admin1@mind.com
+                type: string
+              password:
+                example: '123456'
+                type: string
+            type: object
+      responses:
+        '200':
+          description: login user
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            X-Powered-By:
+              type: string
+      tags:
+        - user_management
+        - auth
+      description: login user
+      operationId: loginUser
+      summary: login user
+  /user-management/api/auth/register:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - text/plain
+      parameters:
+        - in: body
+          name: body
+          schema:
+            properties:
+              email:
+                example: admin1@mind.com
+                type: string
+              name:
+                example: Cihan
+                type: string
+              password:
+                example: '123456'
+                type: string
+            type: object
+      responses:
+        '201':
+          description: register user response
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            content-length:
+              type: string
+            date:
+              type: string
+            etag:
+              type: string
+            x-powered-by:
+              type: string
+      tags:
+        - user_management
+        - auth
+      description: register user
+      operationId: registerUser
+      summary: register user
+  /user-management/api/users/list:
+    get:
+      consumes:
+        - text/plain
+      produces:
+        - text/plain
+      parameters:
+        - description: |-
+            sayfa numarasi 
+            varsayilan degeri '1'
+          in: query
+          name: page
+          type: string
+        - description: |-
+            sayfa basina gelecek dokuman sayisi 
+            varsayilan degeri '10'
+          in: query
+          name: limit
+          type: string
+        - description: arama yapilacak kelimeler
+          in: query
+          name: keyword
+          type: string
+        - description: |-
+            siralama secenegi 
+            secenekler ('createdAt', 'name', 'email') 
+            varsayilan: 'createdAt'
+          in: query
+          name: sortBy
+          type: string
+        - description: |-
+            siralama bicimi 
+            secenekler ('asc', 'desc')
+            varsayilan deger 'desc'
+          in: query
+          name: orderBy
+          type: string
+        - in: body
+          name: body
+          schema:
+            format: binary
+            type: string
+      responses:
+        '200':
+          description: user list
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Connection:
+              type: string
+            Content-Length:
+              type: string
+            Date:
+              type: string
+            ETag:
+              type: string
+            Keep-Alive:
+              type: string
+            X-Powered-By:
+              type: string
+      tags:
+        - user_management
+        - user
+      description: user list
+      operationId: userList
+      summary: user list
+  /user-management/api/users/{id}:
+    parameters:
+      - description: user _id degeri
+        in: path
+        name: id
+        required: true
+        type: string
+    delete:
+      parameters: []
+      responses:
+        '204':
+          description: delete user
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            date:
+              type: string
+            x-powered-by:
+              type: string
+      tags:
+        - user_management
+        - user
+      description: delete user
+      operationId: deleteUser
+      summary: delete user
+    get:
+      consumes:
+        - text/plain
+      produces:
+        - text/plain
+      parameters:
+        - in: body
+          name: body
+          schema:
+            format: binary
+            type: string
+      responses:
+        '200':
+          description: get user by id
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            content-length:
+              type: string
+            date:
+              type: string
+            etag:
+              type: string
+            x-powered-by:
+              type: string
+      tags:
+        - user_management
+        - user
+      description: get user by id
+      operationId: getUserById
+      summary: get user by id
+    put:
+      consumes:
+        - text/plain
+      parameters:
+        - in: body
+          name: body
+          schema:
+            format: binary
+            type: string
+      responses:
+        '204':
+          description: update user
+          headers:
+            access-control-allow-origin:
+              type: string
+            connection:
+              type: string
+            date:
+              type: string
+            x-powered-by:
+              type: string
+      tags:
+        - user_management
+        - user
+      description: update user
+      operationId: updateUser
+      summary: update user
+tags:
+  - name: user_management
+  - name: auth
+  - name: user
+  - name: jwt
+  - name: customer_management
+  - name: customer
+  - name: company
+  - name: customer notes
+  - name: sale_management
+  - name: sales
