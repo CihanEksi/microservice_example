@@ -10,5 +10,9 @@
     "CUSTOMER_INACTIVE": {
         "message": "Customer is inactive.",
         "status": 403
+    },
+    "CUSTOMER_EMAIL_ALREADY_EXISTS": {
+        "message": "This email is already exists.",
+        "status": 400
     }
 }

@@ -55,6 +55,7 @@ async function createDatabaseAndTable() {
         status VARCHAR(255) NOT NULL,
         note TEXT DEFAULT NULL,
         date TIMESTAMP DEFAULT NULL,
+        saleStatus VARCHAR(255) NOT NULL,
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         FOREIGN KEY (saleId) REFERENCES sales(_id)

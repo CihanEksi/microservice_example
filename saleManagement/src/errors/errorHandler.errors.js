@@ -1,7 +1,7 @@
 const errorCodes = require('./mergedErrors.errors');
 
 const errorHandler = (err, req, res, next) => {
-    console.log(err, 'error123');
+    console.log(err);
     const errorCode = err.message;
     const error = errorCodes?.[errorCode];
     const errorMessage = error?.message || "Internal Server Error";

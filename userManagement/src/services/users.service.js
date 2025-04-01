@@ -82,7 +82,7 @@ const updateUserValidation = async (userId, updateData) => {
 
     const userWithEmail = await User.findOne({ email: updateData.email });
 
-    if (userWithEmail) {
+    if (userWithEmail && `${userWithEmail._id}` !== `${userId}`) {
         throw new Error('USER_ALREADY_EXISTS');
     }
 

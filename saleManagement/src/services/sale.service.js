@@ -4,7 +4,7 @@ const { pool } = require('../database/mysql.database.js');
 
 const SaleQuery = 'INSERT INTO sales (customerId, totalAmount,status) VALUES (?, ?, ?)';
 const saleLogsQuery = 'INSERT INTO sale_logs (status, customerId, totalAmount,saleId) VALUES (?, ?, ?, ?)';
-const notesQuery = 'INSERT INTO notes (saleId, status, note, date) VALUES (?, ?, ?, ?)';
+const notesQuery = 'INSERT INTO notes (saleId, status, note, date,saleStatus) VALUES (?, ?, ?, ?, ?)';
 
 const saleCreateValidation = async (data, token) => {
     const {
@@ -29,13 +29,18 @@ const createSale = async (data, token) => {
 
     await connection.beginTransaction();
 
+    const response = {};
+
     try {
         const [saleResult] = await connection.query(SaleQuery, SaleValues);
-        const saleLogsValues = [SALE_STATUS.new, customerId, totalAmount, saleResult.insertId];
+        const saleId = saleResult.insertId;
+        response.saleId = saleId;
+
+        const saleLogsValues = [SALE_STATUS.new, customerId, totalAmount, saleId];
         const [saleLogResult] = await connection.query(saleLogsQuery, saleLogsValues);
 
         if (note || date) {
-            const noteValues = [saleResult.insertId, SALE_STATUS.new, note, date];
+            const noteValues = [saleId, SALE_STATUS.new, note, date, SALE_STATUS.new];
             await connection.query(notesQuery, noteValues);
         }
 
@@ -49,6 +54,9 @@ const createSale = async (data, token) => {
     finally {
         connection.release();
     }
+
+
+    return response;
 };
 
 const getSaleById = async (saleId) => {
@@ -89,7 +97,7 @@ const updateSale = async (saleId, data) => {
         await connection.query(saleLogsQuery, logValues);
 
         if (note || date) {
-            const noteValues = [saleId, status, note, date];
+            const noteValues = [saleId, status, note, date, status];
             await connection.query(notesQuery, noteValues);
         }
 
@@ -107,17 +115,26 @@ const updateSale = async (saleId, data) => {
 };
 
 const list = async (params) => {
-    let { page = 1, limit = 10 } = params;
+    let { page = 1, limit = 10, saleId } = params;
     page = Number(page);
     limit = Number(limit);
     const offset = (page - 1) * limit;
-    const query = "SELECT sale_management.sales.`_id`, sale_management.sales.`_id` AS saleId, sales.status FROM sales ORDER BY sales.createdAt DESC LIMIT ?, ?";
+    let query = "SELECT sale_management.sales.`_id`, sale_management.sales.`_id` AS saleId, sales.status,sales.totalAmount FROM sales ";
+    const saleQueryValues = [];
+    if (saleId) {
+        query += " WHERE sales._id = ? ";
+        saleQueryValues.push(saleId);
+    }
+
+    query += " ORDER BY sales.createdAt DESC LIMIT ?, ? ";
+    saleQueryValues.push(offset, limit);
+
     connection = await pool.getConnection();
 
-    const [sales] = await connection.query(query, [offset, limit]);
+    const [sales] = await connection.query(query, saleQueryValues);
     const salesIds = sales.map(sale => sale._id);
 
-    const notesQuery = 'SELECT _id,note,date,createdAt,saleId FROM notes WHERE saleId IN (?)'
+    const notesQuery = 'SELECT _id,note,date,createdAt,saleId,saleStatus FROM notes WHERE saleId IN (?)'
     const saleLogsQuery = 'SELECT _id,status,totalAmount,createdAt,saleId FROM sale_logs WHERE saleId IN (?)'
 
     const countSales = 'SELECT COUNT(*) as count FROM sales';
@@ -126,7 +143,7 @@ const list = async (params) => {
     const saleLogsPromise = connection.query(saleLogsQuery, [salesIds]);
     const countPromise = connection.query(countSales);
 
-    const [notes, saleLogs,count] = await Promise.all([notesPromise, saleLogsPromise,countPromise]);
+    const [notes, saleLogs, count] = await Promise.all([notesPromise, saleLogsPromise, countPromise]);
 
     connection.release();
 

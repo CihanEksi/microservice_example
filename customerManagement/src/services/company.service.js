@@ -1,5 +1,4 @@
-const { Company } = require('../models');
-const customerService = require('./customer.service');
+const { Company, Customer } = require('../models');
 const { ObjectId } = require('mongoose').Types;
 
 async function createCompany(data) {
@@ -31,7 +30,7 @@ const deleteCompany = async (companyId) => {
   }
 
   await Company.deleteOne({ _id: companyId });
-  await customerService.updateManyCustomers({ company: companyId }, { company: null });
+  await Customer.updateMany({ company: companyId }, { company: null });
 };
 
 const list = async ({ page = 1, limit = 10, id }) => {
@@ -52,16 +51,16 @@ const list = async ({ page = 1, limit = 10, id }) => {
     .skip((page - 1) * limit)
     .limit(limit)
     .lean();
-  
+
   const total = await Company.countDocuments(filter);
 
   return {
     companies,
     pagination: {
-        "total": total,
-        "page": page,
-        "limit": limit,
-        "totalPage": Math.ceil(total / limit)
+      "total": total,
+      "page": page,
+      "limit": limit,
+      "totalPage": Math.ceil(total / limit)
     }
   }
 };
@@ -69,11 +68,11 @@ const list = async ({ page = 1, limit = 10, id }) => {
 const getCompanyById = async (companyId) => {
   const listData = await list({ id: companyId });
 
-  if (listData.length === 0) {
+  if (listData.companies.length === 0) {
     throw new Error('COMPANY_NOT_FOUND');
   }
-  
-  return listData[0];
+
+  return listData.companies[0];
 }
 
 

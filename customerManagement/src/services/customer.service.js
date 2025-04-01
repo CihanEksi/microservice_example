@@ -138,14 +138,6 @@ const getCustomers = async (params) => {
     };
 };
 
-const updateManyCustomers = async (filter, updateData) => {
-    if (!Object.keys(filter).length) {
-        return
-    }
-
-    const customers = await Customer.updateMany(filter, updateData);
-    return customers;
-}
 
 const updateCustomerValidation = async (id, updateData) => {
     if (!ObjectId.isValid(id)) {
@@ -156,6 +148,14 @@ const updateCustomerValidation = async (id, updateData) => {
 
     if (!customer) {
         throw new Error('CUSTOMER_NOT_FOUND');
+    }
+
+    if(updateData.email) {
+        const userWithEmail = await Customer.findOne({ email: updateData.email }).lean();
+        
+        if(userWithEmail && `${userWithEmail._id}` !== `${id}`) {
+            throw new Error('CUSTOMER_EMAIL_ALREADY_EXISTS');
+        }
     }
 
     const company = updateData.company;
@@ -220,6 +220,5 @@ module.exports = {
     getCustomers,
     updateCustomer,
     deleteCustomer,
-    updateManyCustomers,
     getCustomerById,
 };

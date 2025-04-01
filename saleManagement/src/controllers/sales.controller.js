@@ -4,14 +4,15 @@ const asyncHandler = require('../middlewares/asyncHandler.middleware.js');
 const createSale = asyncHandler(async (req, res) => {
   const data = req.body;
   const token = req.token;
-  await saleService.createSale(data,token);
-  res.status(201).json();
+  const createSale = await saleService.createSale(data, token);
+  const saleDetail = await saleService.list({ saleId: createSale.saleId });
+  res.status(201).json(saleDetail.sales.at(0));
 });
 
 const updateSale = asyncHandler(async (req, res) => {
   const data = req.body;
   const saleId = req.params.saleId;
-  await saleService.updateSale(saleId,data);
+  await saleService.updateSale(saleId, data);
   res.status(204).json();
 });
 
