@@ -33,8 +33,8 @@ const createSale = async (data, token) => {
         const [saleResult] = await connection.query(SaleQuery, SaleValues);
         const saleLogsValues = [SALE_STATUS.new, customerId, totalAmount, saleResult.insertId];
         const [saleLogResult] = await connection.query(saleLogsQuery, saleLogsValues);
-        
-        if(note || date) {
+
+        if (note || date) {
             const noteValues = [saleResult.insertId, SALE_STATUS.new, note, date];
             await connection.query(notesQuery, noteValues);
         }
@@ -61,7 +61,7 @@ const getSaleById = async (saleId) => {
     if (!sale.length) {
         throw new Error('SALE_NOT_FOUND');
     }
-    
+
     return sale[0];
 };
 
@@ -74,7 +74,7 @@ const updateSale = async (saleId, data) => {
     const query = "UPDATE sales SET totalAmount = ?, status = ? WHERE _id = ?";
 
     const sale = await getSaleById(saleId);
-    
+
     const status = data.status || sale.status;
 
     connection = await pool.getConnection();
@@ -84,7 +84,7 @@ const updateSale = async (saleId, data) => {
     try {
         const values = [totalAmount, status, saleId];
         connection.query(query, values);
-        
+
         const logValues = [status, sale.customerId, totalAmount, saleId];
         await connection.query(saleLogsQuery, logValues);
 
@@ -106,8 +106,51 @@ const updateSale = async (saleId, data) => {
 
 };
 
+const list = async (params) => {
+    let { page = 1, limit = 10 } = params;
+    page = Number(page);
+    limit = Number(limit);
+    const offset = (page - 1) * limit;
+    const query = "SELECT sale_management.sales.`_id`, sale_management.sales.`_id` AS saleId, sales.status FROM sales LIMIT ?, ?";
+    connection = await pool.getConnection();
+
+    const [sales] = await connection.query(query, [offset, limit]);
+    const salesIds = sales.map(sale => sale._id);
+
+    const notesQuery = 'SELECT _id,note,date,createdAt,saleId FROM notes WHERE saleId IN (?)'
+    const saleLogsQuery = 'SELECT _id,status,totalAmount,createdAt,saleId FROM sale_logs WHERE saleId IN (?)'
+
+    const countSales = 'SELECT COUNT(*) as count FROM sales';
+
+    const notesPromise = connection.query(notesQuery, [salesIds]);
+    const saleLogsPromise = connection.query(saleLogsQuery, [salesIds]);
+    const countPromise = connection.query(countSales);
+
+    const [notes, saleLogs,count] = await Promise.all([notesPromise, saleLogsPromise,countPromise]);
+
+    connection.release();
+
+    sales.forEach(sale => {
+        sale.notes = notes.at(0).filter(note => note.saleId === sale._id);
+        sale.saleLogs = saleLogs.at(0).filter(log => log.saleId === sale._id);
+    });
+
+    const totalNumber = count[0]?.at(0)?.count || 0;
+
+    return {
+        sales,
+        pagination: {
+            total: totalNumber,
+            page: page,
+            limit: limit,
+            totalPage: Math.ceil(totalNumber / limit),
+        },
+    }
+};
+
 module.exports = {
     createSale,
     updateSale,
     getSaleById,
+    list,
 };

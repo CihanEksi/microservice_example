@@ -12,12 +12,12 @@ router.post(
     salesController.createSale
 );
 
-// router.get(
-//     '/list',
-//     authenticate,
-//     validator(salesValidation.getSales),
-//     salesController.getSales
-// );
+router.get(
+    '/list',
+    authenticate,
+    validator(salesValidation.getSales),
+    salesController.getSales
+);
 
 router.put(
     '/:saleId',

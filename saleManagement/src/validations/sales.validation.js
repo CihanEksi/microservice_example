@@ -22,7 +22,15 @@ const updateSaleSchema = Joi.object({
   })
 });
 
+const getSales = Joi.object({
+  query: Joi.object({
+    page: Joi.number().min(1).optional(),
+    limit: Joi.number().min(1).optional(),
+  })
+});
+
 module.exports = {
   createSaleSchema,
   updateSaleSchema,
+  getSales,
 };

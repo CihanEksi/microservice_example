@@ -15,7 +15,7 @@ const updateSale = asyncHandler(async (req, res) => {
   res.status(204).json();
 });
 
-const list = asyncHandler(async (req, res) => {
+const getSales = asyncHandler(async (req, res) => {
   const query = req.query;
   const companies = await saleService.list(query);
   res.status(200).json(companies);
@@ -23,6 +23,6 @@ const list = asyncHandler(async (req, res) => {
 
 module.exports = {
   createSale,
-  list,
+  getSales,
   updateSale,
 };
