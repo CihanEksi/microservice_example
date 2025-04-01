@@ -1,0 +1,6 @@
+{
+    "SOMETHING_WENT_WRONG": {
+        "status": 500,
+        "message": "Something went wrong"
+    }
+}

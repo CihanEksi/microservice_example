@@ -1,0 +1,10 @@
+{
+    "SALE_NOT_FOUND": {
+        "message": "Sale not found.",
+        "status": 404
+    },
+    "SALE_UPDATE_FAILED": {
+        "message": "Sale update failed.",
+        "status": 400
+    }
+}
