@@ -69,8 +69,7 @@ const getUserById = async (userId) => {
     return user;
 }
 
-const updateUser = async (userId, updateData) => {
-
+const updateUserValidation = async (userId, updateData) => {
     if (!ObjectId.isValid(userId)) {
         throw new Error('USER_NOT_FOUND');
     }
@@ -80,16 +79,30 @@ const updateUser = async (userId, updateData) => {
     if (!user) {
         throw new Error('USER_NOT_FOUND');
     }
-    console.log('user', user);
+
+    const userWithEmail = await User.findOne({ email: updateData.email });
+
+    if (userWithEmail) {
+        throw new Error('USER_ALREADY_EXISTS');
+    }
+
+    return {
+        user
+    }
+}
+
+
+const updateUser = async (userId, updateData) => {
+    const { user } = await updateUserValidation(userId, updateData);
+
     Object.assign(user, updateData);
-    console.log('user', user);
 
     await user.save();
 
     return user;
 };
 
-const deleteUser = async (userId) => {
+const deleteUserValidation = async (userId) => {
     if (!ObjectId.isValid(userId)) {
         throw new Error('USER_NOT_FOUND');
     }
@@ -99,6 +112,10 @@ const deleteUser = async (userId) => {
     if (!user) {
         throw new Error('USER_NOT_FOUND');
     }
+}
+
+const deleteUser = async (userId) => {
+    await deleteUserValidation(userId);
 
     await User.deleteOne({ _id: userId });
 
