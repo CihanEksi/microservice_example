@@ -111,7 +111,7 @@ const list = async (params) => {
     page = Number(page);
     limit = Number(limit);
     const offset = (page - 1) * limit;
-    const query = "SELECT sale_management.sales.`_id`, sale_management.sales.`_id` AS saleId, sales.status FROM sales LIMIT ?, ?";
+    const query = "SELECT sale_management.sales.`_id`, sale_management.sales.`_id` AS saleId, sales.status FROM sales ORDER BY sales.createdAt DESC LIMIT ?, ?";
     connection = await pool.getConnection();
 
     const [sales] = await connection.query(query, [offset, limit]);
