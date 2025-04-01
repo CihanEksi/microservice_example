@@ -52,8 +52,18 @@ const list = async ({ page = 1, limit = 10, id }) => {
     .skip((page - 1) * limit)
     .limit(limit)
     .lean();
+  
+  const total = await Company.countDocuments(filter);
 
-  return companies;
+  return {
+    companies,
+    pagination: {
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "totalPage": Math.ceil(total / limit)
+    }
+  }
 };
 
 const getCompanyById = async (companyId) => {

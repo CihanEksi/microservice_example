@@ -13,7 +13,6 @@ const CUSTOMER_PROJECTION = Object.freeze({
             _id: 1,
             note: 1,
             createdAt:1,
-            customerNoteId: '$_id'
         }
     }
 });
