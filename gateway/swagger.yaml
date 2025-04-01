@@ -678,6 +678,8 @@ paths:
               type: string
             x-powered-by:
               type: string
+          schema:
+            $ref: '#/definitions/registerUserResponse'
       tags:
         - user_management
         - auth
@@ -837,6 +839,19 @@ paths:
       description: update user
       operationId: updateUser
       summary: update user
+definitions:
+  registerUserResponse:
+    type: "object"
+    properties:
+      user:
+        type: "object"
+        properties:
+          userId:
+            type: "string"
+          name:
+            type: "string"
+          email:
+            type: "string"
 tags:
   - name: user_management
   - name: auth
