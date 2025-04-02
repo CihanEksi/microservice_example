@@ -22,9 +22,6 @@ const invoker = async (method, url, data, headers) => {
 
 const jwtCheck = async (token) => {
     const url = `${serviceUrl}/user-management/api/auth/jwt`;
-    console.log('url',
-        url
-    );
     const user = await invoker('get', url, null, { Authorization: `Bearer ${token}`});
     return user;
 }

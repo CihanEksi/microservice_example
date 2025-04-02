@@ -9,10 +9,6 @@ const userManagementUrl = process.env.USER_MANAGEMENT_URL
 const customerManagementUrl = process.env.CUSTOMER_MANAGEMENT_URL
 const saleManagementUrl = process.env.SALE_MANAGEMENT_URL
 
-console.log('userManagementUrl', userManagementUrl);
-console.log('customerManagementUrl', customerManagementUrl);
-console.log('saleManagementUrl', saleManagementUrl);
-
 const userManagementProxy = createProxyMiddleware({
   target: userManagementUrl,
   changeOrigin: true,
