@@ -1,13 +1,17 @@
-require('dotenv').config();
 const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
+require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 2999;
 
-const userManagementUrl = process.env.USER_MANAGEMENT_SERVICE_URL
-const customerManagementUrl = process.env.CUSTOMER_MANAGEMENT_SERVICE_URL
-const saleManagementUrl = process.env.SALE_MANAGEMENT_SERVICE_URL
+const userManagementUrl = process.env.USER_MANAGEMENT_URL
+const customerManagementUrl = process.env.CUSTOMER_MANAGEMENT_URL
+const saleManagementUrl = process.env.SALE_MANAGEMENT_URL
+
+console.log('userManagementUrl', userManagementUrl);
+console.log('customerManagementUrl', customerManagementUrl);
+console.log('saleManagementUrl', saleManagementUrl);
 
 const userManagementProxy = createProxyMiddleware({
   target: userManagementUrl,

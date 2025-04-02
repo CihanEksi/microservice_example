@@ -1,0 +1,89 @@
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - microservices-network
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: sale_management
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - microservices-network
+    command: --default-authentication-plugin=mysql_native_password
+
+  # Microservices
+  user-management:
+    build:
+      context: ./userManagement
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb
+    env_file:
+      - ./userManagement/.env
+    ports:
+      - "3000:3000"
+    networks:
+      - microservices-network
+    restart: unless-stopped
+
+  customer-management:
+    build:
+      context: ./customerManagement
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb
+    env_file:
+      - ./customerManagement/.env
+    ports:
+      - "3001:3001"
+    networks:
+      - microservices-network
+    restart: unless-stopped
+
+  sale-management:
+    build:
+      context: ./saleManagement
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+    env_file:
+      - ./saleManagement/.env
+    ports:
+      - "3002:3002"
+    networks:
+      - microservices-network
+    restart: unless-stopped
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    depends_on:
+      - user-management
+      - customer-management
+      - sale-management
+    env_file:
+      - ./gateway/.env
+    ports:
+      - "2999:2999"
+    networks:
+      - microservices-network
+    restart: unless-stopped
+
+networks:
+  microservices-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+  mysql_data:

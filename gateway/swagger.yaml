@@ -5,9 +5,16 @@ info:
   version: 1.0.0
 host: 'localhost:2999'
 basePath: /
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
 paths:
   /customer-management/api/company/create:
     post:
+      security:
+        - Bearer: []
       consumes:
         - application/json
       produces:
@@ -37,6 +44,8 @@ paths:
               type: string
             x-powered-by:
               type: string
+          schema:
+            $ref: '#/definitions/Company'
       tags:
         - customer_management
         - company
@@ -45,6 +54,8 @@ paths:
       summary: create company
   /customer-management/api/company/list:
     get:
+      security:
+        - Bearer: []
       produces:
         - text/plain
       parameters:
@@ -70,6 +81,8 @@ paths:
               type: string
             x-powered-by:
               type: string
+          schema:
+            $ref: '#/definitions/CompanyListResponse'
       tags:
         - customer_management
         - company
@@ -83,6 +96,8 @@ paths:
         required: true
         type: string
     delete:
+      security:
+        - Bearer: []
       parameters: []
       responses:
         '204':
@@ -110,6 +125,8 @@ paths:
         required: true
         type: string
     post:
+      security:
+        - Bearer: []
       consumes:
         - application/json
       produces:
@@ -139,6 +156,8 @@ paths:
               type: string
             x-powered-by:
               type: string
+          schema:
+            $ref: '#/definitions/CreateCustomerNoteResponse'
       tags:
         - customer_management
         - customer notes
@@ -153,6 +172,8 @@ paths:
         required: true
         type: string
     delete:
+      security:
+        - Bearer: []
       parameters: []
       responses:
         '204':
@@ -173,6 +194,8 @@ paths:
       operationId: deleteCustomerNote
       summary: delete customer note
     put:
+      security:
+        - Bearer: []
       consumes:
         - application/json
       parameters:
@@ -204,6 +227,8 @@ paths:
       summary: update customer note
   /customer-management/api/customer/create:
     post:
+      security:
+        - Bearer: []
       consumes:
         - application/json
       produces:
@@ -242,6 +267,8 @@ paths:
               type: string
             x-powered-by:
               type: string
+          schema:
+            $ref: '#/definitions/CreateCustomerResponse'
       tags:
         - customer_management
         - customer
@@ -250,6 +277,8 @@ paths:
       summary: create customer
   /customer-management/api/customer/list:
     get:
+      security:
+        - Bearer: []
       consumes:
         - text/plain
       produces:
@@ -297,11 +326,6 @@ paths:
           in: query
           name: id
           type: string
-        - in: body
-          name: body
-          schema:
-            format: binary
-            type: string
       responses:
         '200':
           description: customer list
@@ -318,6 +342,8 @@ paths:
               type: string
             x-powered-by:
               type: string
+          schema:
+            $ref: '#/definitions/CustomerListResponse'
       tags:
         - customer_management
         - customer
@@ -332,6 +358,8 @@ paths:
         required: true
         type: string
     delete:
+      security:
+        - Bearer: []
       consumes:
         - text/plain
       parameters:
@@ -359,6 +387,8 @@ paths:
       operationId: deleteCustomer
       summary: delete customer
     put:
+      security:
+        - Bearer: []
       consumes:
         - application/json
       parameters:
@@ -399,6 +429,8 @@ paths:
       summary: update customer
   /sale-management/api/sales/create:
     post:
+      security:
+        - Bearer: []
       consumes:
         - application/json
       produces:
@@ -438,47 +470,7 @@ paths:
             x-powered-by:
               type: string
           schema:
-            properties:
-              _id:
-                example: 3
-                type: number
-              notes:
-                example: []
-                items: {}
-                type: array
-              saleId:
-                example: 3
-                type: number
-              saleLogs:
-                example:
-                  - _id: 3
-                    createdAt: '2025-04-01T21:33:21.000Z'
-                    saleId: 3
-                    status: Yeni
-                    totalAmount: '2.00'
-                items:
-                  properties:
-                    _id:
-                      example: 3
-                      type: number
-                    createdAt:
-                      example: '2025-04-01T21:33:21.000Z'
-                      type: string
-                    saleId:
-                      example: 3
-                      type: number
-                    status:
-                      example: Yeni
-                      type: string
-                    totalAmount:
-                      example: '2.00'
-                      type: string
-                  type: object
-                type: array
-              status:
-                example: Yeni
-                type: string
-            type: object
+            $ref: '#/definitions/saleCreateResponse'
       tags:
         - sale_management
         - sales
@@ -487,9 +479,17 @@ paths:
       summary: create sale
   /sale-management/api/sales/list:
     get:
+      security:
+        - Bearer: []
       produces:
         - text/plain
-      parameters: []
+      parameters:
+        - in: query
+          name: page
+          type: string
+        - in: query
+          name: limit
+          type: string
       responses:
         '200':
           description: list sale
@@ -506,6 +506,8 @@ paths:
               type: string
             x-powered-by:
               type: string
+          schema:
+            $ref: '#/definitions/saleListResponse'
       tags:
         - sale_management
         - sales
@@ -519,6 +521,8 @@ paths:
         required: true
         type: string
     put:
+      security:
+        - Bearer: []
       consumes:
         - application/json
       parameters:
@@ -579,7 +583,7 @@ paths:
         '200':
           description: jwt check
           headers:
-            Access-Control-Allow-Origin:
+            access-control-allow-origin:
               type: string
             Connection:
               type: string
@@ -593,6 +597,8 @@ paths:
               type: string
             X-Powered-By:
               type: string
+          schema:
+            $ref: '#/definitions/JWTCheckResponse'
       tags:
         - user_management
         - jwt
@@ -621,7 +627,7 @@ paths:
         '200':
           description: login user
           headers:
-            Access-Control-Allow-Origin:
+            access-control-allow-origin:
               type: string
             Connection:
               type: string
@@ -635,6 +641,8 @@ paths:
               type: string
             X-Powered-By:
               type: string
+          schema:
+            $ref: '#/definitions/AuthResponse'
       tags:
         - user_management
         - auth
@@ -679,7 +687,7 @@ paths:
             x-powered-by:
               type: string
           schema:
-            $ref: '#/definitions/registerUserResponse'
+            $ref: '#/definitions/RegisterUserResponse'
       tags:
         - user_management
         - auth
@@ -688,6 +696,8 @@ paths:
       summary: register user
   /user-management/api/users/list:
     get:
+      security:
+        - Bearer: []
       consumes:
         - text/plain
       produces:
@@ -732,7 +742,7 @@ paths:
         '200':
           description: user list
           headers:
-            Access-Control-Allow-Origin:
+            access-control-allow-origin:
               type: string
             Connection:
               type: string
@@ -746,6 +756,8 @@ paths:
               type: string
             X-Powered-By:
               type: string
+          schema:
+            $ref: '#/definitions/UserListResponse'
       tags:
         - user_management
         - user
@@ -760,6 +772,8 @@ paths:
         required: true
         type: string
     delete:
+      security:
+        - Bearer: []
       parameters: []
       responses:
         '204':
@@ -780,16 +794,12 @@ paths:
       operationId: deleteUser
       summary: delete user
     get:
+      security:
+        - Bearer: []
       consumes:
         - text/plain
       produces:
         - text/plain
-      parameters:
-        - in: body
-          name: body
-          schema:
-            format: binary
-            type: string
       responses:
         '200':
           description: get user by id
@@ -806,6 +816,8 @@ paths:
               type: string
             x-powered-by:
               type: string
+          schema:
+            $ref: '#/definitions/RegisterUserResponse'
       tags:
         - user_management
         - user
@@ -813,14 +825,15 @@ paths:
       operationId: getUserById
       summary: get user by id
     put:
+      security:
+        - Bearer: []
       consumes:
         - text/plain
       parameters:
         - in: body
           name: body
           schema:
-            format: binary
-            type: string
+            $ref: '#/definitions/updateUserRequest'
       responses:
         '204':
           description: update user
@@ -840,26 +853,329 @@ paths:
       operationId: updateUser
       summary: update user
 definitions:
-  registerUserResponse:
-    type: "object"
-    properties:
-      user:
-        type: "object"
-        properties:
-          userId:
-            type: "string"
-          name:
-            type: "string"
-          email:
-            type: "string"
+    RegisterUserResponse:
+      type: "object"
+      properties:
+        user:
+          type: "object"
+          properties:
+            userId:
+              type: "string"
+            name:
+              type: "string"
+            email:
+              type: "string"
+    AuthResponse:
+      type: object
+      description: "Yetkilendirme yanıtı nesnesi. Kullanıcı bilgilerini ve JWT token içerir."
+      properties:
+        token:
+          type: string
+          description: "Bearer JWT token, yetkilendirilmiş işlemler için gereklidir."
+        user:
+          type: object
+          description: "Kullanıcı bilgileri."
+          properties:
+            _id:
+              type: string
+              description: "User ID."
+            name:
+              type: string
+              description: "User adı."
+            email:
+              type: string
+              description: "User e-posta adresi."
+            role:
+              type: string
+              description: "User rolü."
+    User:
+      type: object
+      description: "Kullanıcı bilgilerini içeren nesne."
+      properties:
+        _id:
+          type: string
+          description: "User ID."
+        name:
+          type: string
+          description: "User adı."
+        email:
+          type: string
+          description: "User e-posta adresi."
+        role:
+          type: string
+          description: "User rolü."
+        isActive:
+          type: boolean
+          description: "Kullanıcının aktif olup olmadığını belirtir."
+        createdAt:
+          type: string
+          format: date-time
+          description: "Kullanıcının oluşturulma tarihi."
+    Pagination:
+      type: object
+      description: "Sayfalama bilgilerini içeren nesne."
+      properties:
+        total:
+          type: integer
+          description: "Toplam kullanıcı sayısı."
+        page:
+          type: integer
+          description: "Mevcut sayfa numarası."
+        limit:
+          type: integer
+          description: "Sayfa başına gösterilecek kullanıcı sayısı."
+        totalPage:
+          type: integer
+          description: "Toplam sayfa sayısı."
+    UserListResponse:
+      type: object
+      description: "Kullanıcı listesini ve sayfalama bilgilerini içeren yanıt nesnesi."
+      properties:
+        data:
+          type: array
+          description: "Kullanıcı listesi."
+          items:
+            $ref: "#/definitions/User"
+        pagination:
+          $ref: "#/definitions/Pagination"
+    JWTCheckResponse:
+      type: object
+      description: "JWT token doğrulama yanıtı. Geçerli token'e sahip kullanıcının bilgilerini içerir."
+      properties:
+        user:
+          $ref: "#/definitions/User"
+    Customer:
+      type: object
+      description: "Müşteri bilgilerini içeren nesne."
+      properties:
+        _id:
+          type: string
+          description: "Müşteri ID."
+        name:
+          type: string
+          description: "Müşteri adı."
+        email:
+          type: string
+          description: "Müşteri e-posta adresi."
+        phone:
+          type: string
+          description: "Müşteri telefon numarası."
+        createdAt:
+          type: string
+          format: date-time
+          description: "Müşterinin oluşturulma tarihi."
+        customerId:
+          type: string
+          description: "Müşteri ID'si."
+    CreateCustomerResponse:
+      type: object
+      description: "Yeni oluşturulan müşteriyi içeren yanıt nesnesi."
+      properties:
+        customer:
+          $ref: "#/definitions/Customer"
+    CustomerListResponse:
+      type: object
+      description: "Müşteri listesini ve sayfalama bilgilerini içeren yanıt nesnesi."
+      properties:
+        data:
+          type: array
+          description: "Müşteri listesi."
+          items:
+            $ref: "#/definitions/Customer"
+        pagination:
+          $ref: "#/definitions/Pagination"
+    Company:
+      type: object
+      description: "Şirket bilgilerini içeren nesne."
+      properties:
+        _id:
+          type: string
+          description: "Şirket ID'si."
+        companyId:
+          type: string
+          description: "Şirket ID'si."
+        name:
+          type: string
+          description: "Şirket adı."
+    CompanyListResponse:
+      type: object
+      description: "Şirketler listesini ve sayfalama bilgilerini içeren yanıt nesnesi."
+      properties:
+        companies:
+          type: array
+          description: "Şirket listesi."
+          items:
+            $ref: "#/definitions/Company"
+        pagination:
+          $ref: "#/definitions/Pagination"
+    CreateCustomerNoteResponse:
+      type: object
+      description: "Yeni oluşturulan müşteri notunu içeren yanıt nesnesi."
+      properties:
+        note:
+          type: object
+          description: "Oluşturulan müşteri notu."
+          properties:
+            _id:
+              type: string
+              description: "Oluşturulan notun ID'si."
+            note:
+              type: string
+              description: "Oluşturulan notun içeriği."
+            noteId:
+              type: string
+              description: "Oluşturulan notun ID'si."
+    SaleLog:
+      type: object
+      description: "Satış loglarını temsil eden nesne."
+      properties:
+        _id:
+          type: integer
+          description: "Satış logu ID'si."
+        status:
+          type: string
+          description: "Satış logu durumu."
+        totalAmount:
+          type: string
+          description: "Satış tutarı."
+        createdAt:
+          type: string
+          format: date-time
+          description: "Satış logunun oluşturulma tarihi."
+        saleId:
+          type: integer
+          description: "Satış ID'si."
+    Sale:
+      type: object
+      description: "Satışı temsil eden nesne."
+      properties:
+        _id:
+          type: integer
+          description: "Satış ID'si."
+        saleId:
+          type: integer
+          description: "Satış ID'si."
+        status:
+          type: string
+          description: "Satış durumu."
+        notes:
+          type: array
+          description: "Satışa ait notlar."
+          items:
+            $ref: "#/definitions/SaleNote"
+        saleLogs:
+          type: array
+          description: "Satış logları."
+          items:
+            $ref: "#/definitions/SaleLog"
+    SaleNote:
+      type: object
+      description: "Satışa ait notları temsil eden nesne."
+      properties:
+        _id:
+          type: integer
+          description: "Satış notu ID'si."
+        note:
+          type: string
+          description: "Satış notunun içeriği."
+        date:
+          type: string
+          format: date-time
+          description: "Satış sırasında tutulan tarih."
+        createdAt:
+          type: string
+          format: date-time
+          description: "Satış notunun oluşturulma tarihi."
+        saleId:
+          type: integer
+          description: "Satış ID'si."
+    saleCreateResponse:
+      type: object
+      description: "Yeni oluşturulan satış yanıt nesnesi."
+      properties:
+        _id:
+          type: integer
+          description: "Satış ID'si."
+        saleId:
+          type: integer
+          description: "Satış ID'si."
+        status:
+          type: string
+          description: "Satış durumu."
+        notes:
+          type: array
+          description: "Satışa ait notlar."
+          items:
+            $ref: "#/definitions/SaleNote"
+        saleLogs:
+          type: array
+          description: "Satış logları."
+          items:
+            $ref: "#/definitions/SaleLog"
+    saleListResponse:
+      type: object
+      description: "Satışların listelendiği yanıt nesnesi."
+      properties:
+        sales:
+          type: array
+          description: "Satışların listesi."
+          items:
+            $ref: "#/definitions/Sale"
+        pagination:
+          type: object
+          description: "Sayfalama bilgisi."
+          properties:
+            total:
+              type: integer
+              description: "Filtrede toplam kaç kayıt var."
+            page:
+              type: integer
+              description: "Şu anda gösterilen sayfa."
+            limit:
+              type: integer
+              description: "Sayfa başına gösterilen kayıt sayısı."
+            totalPage:
+              type: integer
+              description: "Toplam sayfa sayısı."
+    updateUserRequest:
+      type: object
+      description: "Kullanıcı bilgilerini güncellemek için kullanılan istek nesnesi."
+      properties:
+        name:
+          type: string
+          description: "Kullanıcı adı."
+        email:
+          type: string
+          format: email
+          description: "Kullanıcının e-posta adresi."
+        role:
+          type: string
+          enum: ["Admin", "Satış Temsilcisi", "Depo", "Finans", "Müşteri Hizmetleri", "İnsan Kaynakları", "Bilgi İşlem", "Atanmamış Rol"]
+          description: "Kullanıcının rolü. Bir kullanıcı rolü, yukarıdaki seçeneklerden biri olmalıdır."
+        isActive:
+          type: boolean
+          description: "Kullanıcı aktif mi?"
+        password:
+          type: string
+          description: "Kullanıcı parolası."
 tags:
   - name: user_management
+    description: "Kullanıcı işlemleriyle ilgili API'ler burada bulunur"
   - name: auth
+    description: "Kullanıcı  olusturma ve giris yapma"
   - name: user
+    description: "Kullanıcı işlemleriyle ilgili API'ler burada bulunur"
   - name: jwt
+    description: "JWT ile ilgili API'ler burada bulunur"
   - name: customer_management
+    description: "Musteri ile ilgili API'ler burada bulunur"
   - name: customer
+    description: "Musteri CRUD API'ler burada bulunur"
   - name: company
+    description: "Musteri Sirketleri ile ilgili API'ler burada bulunur"
   - name: customer notes
+    description: "Musteri Notlari ile ilgili API'ler burada bulunur"
   - name: sale_management
+    description: "Satis ile ilgili API'ler burada bulunur"
   - name: sales
+    description: "Satis CRUD API'ler burada bulunur"
